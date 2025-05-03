@@ -3,30 +3,27 @@ import IUser from "../models/interfaces/Profile/IProfile";
 import { profileRepository } from "../repositories/profileRepository";
 
 export default class userService {
-  private static async createUserIntersts(userId: number, interests: number[]) {
-    try {
-      await profileRepository.createInterests(userId, interests);
-    } catch (error) {
-      throw new Error("Error while creating interests");
-    }
-  }
+  // private static async createUserIntersts(userId: number, interests: number[]) {
+  //   try {
+  //     await profileRepository.createInterests(userId, interests);
+  //   } catch (error) {
+  //     throw new Error("Error while creating interests");
+  //   }
+  // }
 
-  private static async createUserPicture(userId: number, picture: string) {
-    try {
-      await profileRepository.createPicture(userId, picture);
-    } catch (error) {
-      throw new Error("Error while creating pictures");
-    }
-  }
+  // private static async createUserPicture(userId: number, picture: string) {
+  //   try {
+  //     await profileRepository.createPicture(userId, picture);
+  //   } catch (error) {
+  //     throw new Error("Error while creating pictures");
+  //   }
+  // }
 
   static async create(data: IUser): Promise<number | undefined> {
     const id = await profileRepository.createProfile(data);
     if (!id) {
       throw new Error("User creation failed");
     }
-
-    this.createUserIntersts(id, data.interests);
-    this.createUserPicture(id, data.picture);
 
     return id;
   }
@@ -40,8 +37,6 @@ export default class userService {
     if (!userFromDb) {
       throw new Error("User not found");
     }
-
-    console.log("UserFromDB", userFromDb)
 
     const user = new userDto(userFromDb)
     return user;

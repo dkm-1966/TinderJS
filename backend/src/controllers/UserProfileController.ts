@@ -29,7 +29,7 @@ class UserProfileController {
   static async createUserProfile(req: Request, res: Response): Promise<void> {
     try {
       const data = req.body;
-
+      console.log(data)
       const id = await userService.create(data);
 
       res.status(201).json({

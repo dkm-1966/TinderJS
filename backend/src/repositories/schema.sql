@@ -1,10 +1,11 @@
 CREATE TABLE "profile"(
     "id" SERIAL PRIMARY KEY,
-    "age" INTEGER NOT NULL,
-    "info" VARCHAR(255) NOT NULL,
-    "country" VARCHAR(255) NOT NULL,
-    "city" VARCHAR(255) NOT NULL,
-    "user_id" INTEGER NOT NULL
+    "name" VARCHAR(255),
+    "age" INTEGER,
+    "info" VARCHAR(255),
+    "country" VARCHAR(255),
+    "city" VARCHAR(255),
+    "user_id" INTEGER
 );
 
 CREATE TABLE "interests"(
@@ -42,9 +43,8 @@ CREATE TABLE "picture"(
 CREATE TABLE "users"(
     "id" SERIAL PRIMARY KEY,
     "email" VARCHAR(255) NOT NULL,
-    "password" VARCHAR(255) NOT NULL,
-    "name" VARCHAR(255) NOT NULL
-);
+    "password" VARCHAR(255) NOT NULL
+    );
 
 ALTER TABLE
     "user_interest" ADD CONSTRAINT "user_interest_profile_id_foreign" FOREIGN KEY("profile_id") REFERENCES "profile"("id") ON DELETE CASCADE;

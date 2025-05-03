@@ -1,8 +1,8 @@
 import userRepository from "../repositories/userRepository";
 
 export class AuthService {
-  static async register(name: string, email: string, password: string): Promise<number> {
-    const userId = await userRepository.createUser({ name, email, password });
+  static async register(email: string, password: string): Promise<number> {
+    const userId = await userRepository.createUser({email, password });
     return userId;
   }
 

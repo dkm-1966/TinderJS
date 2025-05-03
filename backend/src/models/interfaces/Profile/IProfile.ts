@@ -6,4 +6,5 @@ export default interface IProfile {
     picture: string;
     country: string;
     city: string;
+    id: number;
 }

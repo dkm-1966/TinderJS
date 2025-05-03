@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from "react";
 import img from "../assets/default-ui-image-placeholder-wireframes-600nw-1037719192.webp";
 import { interests } from "../consts/interests";
 import Button from "../UI/Button";
+import Dropdown from "../UI/Dropdown";
 
 const ProfileForm: FC = () => {
   const [userInfo, setUserInfo] = useState<IUser>({
@@ -15,11 +16,13 @@ const ProfileForm: FC = () => {
     picture_url: null,
     interests: [],
   });
-  const [interestsCatallog, setInterestsCatallog] =
+  const [interestsCatalog, setInterestsCatalog] =
     useState<IInterest[]>(interests);
+  const [category, setCategory] = useState<string>("");
 
   useEffect(() => {
     const id = sessionStorage.getItem("userId");
+    console.log("SessionUserID", id);
     fetch(`http://localhost:5000/api/v1/profile?id=${id}`, {
       method: "GET",
     }).then(async (result) => {
@@ -35,21 +38,23 @@ const ProfileForm: FC = () => {
 
   function handleAddInterest(interest: IInterest) {
     const newUserInfo = { ...userInfo };
-    newUserInfo.interests?.push(interest);
+    console.log(newUserInfo)
+    newUserInfo.interests.push(interest);
 
-    const tempInterestsCatallog = [...interestsCatallog];
-    const newInterestsCattallog = tempInterestsCatallog.filter(
+    const tempInterestsCatalog = [...interestsCatalog];
+    const newInterestsCattallog = tempInterestsCatalog.filter(
       (item) => item !== interest
     );
-    setInterestsCatallog(newInterestsCattallog);
+    console.log(newUserInfo)
+    setInterestsCatalog(newInterestsCattallog);
 
     setUserInfo(newUserInfo);
   }
 
   function handleRemoveInterest(interest: IInterest) {
-    const newInterestsCatallog = [...interestsCatallog];
-    newInterestsCatallog.push(interest);
-    setInterestsCatallog(newInterestsCatallog);
+    const newInterestsCatalog = [...interestsCatalog];
+    newInterestsCatalog.push(interest);
+    setInterestsCatalog(newInterestsCatalog);
 
     const newInterests = (userInfo.interests ?? []).filter(
       (item) => item !== interest
@@ -64,6 +69,12 @@ const ProfileForm: FC = () => {
       method: "PUT",
       // body,
     });
+  }
+
+  function handleSelectCategory(value: string) {
+    const categorizedInterestsCatalog = interests.filter(item => item.category === value);
+    setInterestsCatalog(categorizedInterestsCatalog);
+    setCategory(value)
   }
 
   return (
@@ -128,7 +139,12 @@ const ProfileForm: FC = () => {
           />
         </form>
         <div className=" mt-3 flex flex-col gap-2">
-          <h1>Chose some intersts</h1>
+          <div className="flex gap-2 items-center">
+            <h1>Chose some intersts</h1>
+            <Dropdown title={"Category"} params={["Sports", "Music", "Learning"]} selector={handleSelectCategory}/>
+          </div>
+          
+
           <div className="flex flex-wrap bg-blue-300 w-[600px] min-h-[72px] p-2 rounded-md justify-center gap-2">
             {userInfo.interests?.map((value) => (
               <div
@@ -140,10 +156,10 @@ const ProfileForm: FC = () => {
               </div>
             ))}
           </div>
-          {interestsCatallog.length > 0 && (
+          {interestsCatalog.length > 0 && (
             <div className="flex items-center h-44 bg-white rounded-md p-4">
               <div className="flex flex-wrap gap-2 overflow-y-scroll h-32 justify-center">
-                {interestsCatallog.map((value) => (
+                {interestsCatalog.map((value) => (
                   <div
                     key={value.interest + value.category}
                     className="flex items-center justify-center bg-gray-100 w-40 h-14 p-2 rounded-md hover:bg-blue-100 duration-200 cursor-pointer select-none"

@@ -7,8 +7,8 @@ export interface IUserWithId extends IUser {
 
 export default class userRepository {
     static async createUser(data: IUser): Promise<number> {
-        const query = `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id`;
-        const values = [data.name, data.email, data.password];
+        const query = `INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id`;
+        const values = [data.email, data.password];
         const result = await database.query(query, values);
 
         return result.rows[0].id;

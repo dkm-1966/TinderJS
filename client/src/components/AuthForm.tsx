@@ -39,18 +39,20 @@ const AuthForm = () => {
       });
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!email || !password || !name) {
       alert("Please fill in all fields");
       return;
     }
 
-    fetch("http://localhost:5000/api/v1/register", {
+    let id;
+
+    await fetch("http://localhost:5000/api/v1/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({email, password }),
     })
       .then(async (res) => {
         if (res.status === 201) {
@@ -58,11 +60,31 @@ const AuthForm = () => {
           const data = await res.json();
           console.log(data);
 
+          id = data.userId
+
           sessionStorage.setItem("userId", JSON.stringify(data.userId));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    console.log("kljwegfjkwgefelwjrk", id)
+
+    fetch("http://localhost:5000/api/v1/profile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, id }),
+    })
+      .then(async (res) => {
+        if (res.status === 201) {
           navigate(routes.MAIN);
         }
       })
       .catch((err) => {
+        window.alert(err)
         console.log(err);
       });
   };

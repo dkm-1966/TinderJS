@@ -4,8 +4,8 @@ import { AuthService } from "../services/authService";
 export default class AuthController {
   static async register(req: Request, res: Response): Promise<void> {
     try {
-      const { name, email, password } = req.body;
-      const userId = await AuthService.register(name, email, password);
+      const { email, password } = req.body;
+      const userId = await AuthService.register(email, password);
 
       res.status(201).json({ message: "User loged in", userId });
       return 

@@ -4,9 +4,10 @@ import IProfile from "../models/interfaces/Profile/IProfile";
 export class profileRepository {
   //CREATE
   static async createProfile(data: IProfile): Promise<number> {
-    let query = `INSERT INTO profile (name, age, info, country, city) 
-                VALUES (?, ?, ?, ?, ?) RETURNING id`;
-    let values = [data.name, data.age, data.info, data.country, data.city];
+    console.log("rope", data)
+    let query = `INSERT INTO profile (name, age, info, country, city, user_id) 
+                VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`;
+    let values = [data.name, data.age, data.info, data.country, data.city, data.id];
     const userResult = await database.query(query, values);
 
     return userResult.rows[0];
@@ -37,12 +38,11 @@ export class profileRepository {
   //READ
   static async getProfile(id: number): Promise<IProfile | undefined> {
     console.log("repo", id)
-    const query = ` SELECT * FROM users 
-                    LEFT JOIN profile ON profile.user_id = users.id
+    const query = `SELECT * FROM profile 
                     LEFT JOIN user_interest ON user_interest.profile_id = profile.id
                     LEFT JOIN interests ON interests.id = user_interest.interest_id 
                     LEFT JOIN picture ON picture.profile_id = profile.id
-                    WHERE users.id = $1`;
+                    WHERE user_id = $1`;
     const values = [id];
     const result = await database.query(query, values);
 

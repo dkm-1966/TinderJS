@@ -19,6 +19,6 @@ export class userDto {
         this.country = userFromDb.country;
         this.city = userFromDb.city;
         this.picture_url = userFromDb.picture_url;
-        this.interests = userFromDb.interest    ;
+        this.interests = userFromDb.interest ?? [];
     }
 }

@@ -10,5 +10,5 @@ export interface IUser {
     country: string | null;
     city: string | null;
     picture_url: string | null;
-    interests: IInterest[] | null;
+    interests: IInterest[];
 }
