@@ -2,7 +2,7 @@ export default interface IProfile {
     age: number;
     name: string;
     info: string;
-    interests: number[];
+    interests: string[];
     picture: string;
     country: string;
     city: string;

@@ -38,14 +38,14 @@ const ProfileForm: FC = () => {
 
   function handleAddInterest(interest: IInterest) {
     const newUserInfo = { ...userInfo };
-    console.log(newUserInfo)
+    console.log(newUserInfo);
     newUserInfo.interests.push(interest);
 
     const tempInterestsCatalog = [...interestsCatalog];
     const newInterestsCattallog = tempInterestsCatalog.filter(
       (item) => item !== interest
     );
-    console.log(newUserInfo)
+    console.log(newUserInfo);
     setInterestsCatalog(newInterestsCattallog);
 
     setUserInfo(newUserInfo);
@@ -67,14 +67,19 @@ const ProfileForm: FC = () => {
     const id = sessionStorage.getItem("userId");
     fetch(`http://localhost:5000/api/v1/profile?id=${id}`, {
       method: "PUT",
-      // body,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userInfo),
     });
   }
 
   function handleSelectCategory(value: string) {
-    const categorizedInterestsCatalog = interests.filter(item => item.category === value);
+    const categorizedInterestsCatalog = interests.filter(
+      (item) => item.category === value
+    );
     setInterestsCatalog(categorizedInterestsCatalog);
-    setCategory(value)
+    setCategory(value);
   }
 
   return (
@@ -141,9 +146,12 @@ const ProfileForm: FC = () => {
         <div className=" mt-3 flex flex-col gap-2">
           <div className="flex gap-2 items-center">
             <h1>Chose some intersts</h1>
-            <Dropdown title={"Category"} params={["Sports", "Music", "Learning"]} selector={handleSelectCategory}/>
+            <Dropdown
+              title={"Category"}
+              params={["Sports", "Music", "Learning"]}
+              selector={handleSelectCategory}
+            />
           </div>
-          
 
           <div className="flex flex-wrap bg-blue-300 w-[600px] min-h-[72px] p-2 rounded-md justify-center gap-2">
             {userInfo.interests?.map((value) => (

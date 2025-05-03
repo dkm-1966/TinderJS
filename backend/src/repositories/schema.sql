@@ -10,13 +10,13 @@ CREATE TABLE "profile"(
 
 CREATE TABLE "interests"(
     "id" SERIAL PRIMARY KEY,
-    "interest" VARCHAR(255) NOT NULL,
-    "category_id" INTEGER NOT NULL
+    "interest" VARCHAR(255),
+    "category_id" INTEGER
 );
 
 CREATE TABLE "user_interest"(
-    "profile_id" INTEGER NOT NULL,
-    "interest_id" INTEGER NOT NULL
+    "profile_id" INTEGER,
+    "interest_id" INTEGER
 );
 
 CREATE TABLE "match"(
@@ -36,7 +36,7 @@ CREATE TABLE "category"(
 
 CREATE TABLE "picture"(
     "id" SERIAL PRIMARY KEY,
-    "picture_url" VARCHAR(255) NOT NULL,
+    "picture_url" VARCHAR(255),
     "profile_id" BIGINT NOT NULL
 );
 
@@ -60,3 +60,31 @@ ALTER TABLE
     "match" ADD CONSTRAINT "match_first_partner_foreign" FOREIGN KEY("first_partner") REFERENCES "profile"("id") ON DELETE CASCADE;
 ALTER TABLE
     "match" ADD CONSTRAINT "match_second_partner_foreign" FOREIGN KEY("second_partner") REFERENCES "profile"("id") ON DELETE CASCADE;
+
+INSERT INTO category (category) VALUES 
+  ('Sports'),
+  ('Music'),
+  ('Learning');
+
+-- Вставка інтересів (з прив'язкою до категорій через підзапит)
+INSERT INTO interests (interest, category_id) VALUES
+  -- 🏀 Sports
+  ('Football', (SELECT id FROM category WHERE category = 'Sports')),
+  ('Basketball', (SELECT id FROM category WHERE category = 'Sports')),
+  ('Yoga', (SELECT id FROM category WHERE category = 'Sports')),
+  ('Running', (SELECT id FROM category WHERE category = 'Sports')),
+  ('Swimming', (SELECT id FROM category WHERE category = 'Sports')),
+
+  -- 🎵 Music
+  ('Singing', (SELECT id FROM category WHERE category = 'Music')),
+  ('Guitar', (SELECT id FROM category WHERE category = 'Music')),
+  ('Piano', (SELECT id FROM category WHERE category = 'Music')),
+  ('Drums', (SELECT id FROM category WHERE category = 'Music')),
+  ('Listening to music', (SELECT id FROM category WHERE category = 'Music')),
+
+  -- 📚 Learning
+  ('Programming', (SELECT id FROM category WHERE category = 'Learning')),
+  ('Languages', (SELECT id FROM category WHERE category = 'Learning')),
+  ('History', (SELECT id FROM category WHERE category = 'Learning')),
+  ('Mathematics', (SELECT id FROM category WHERE category = 'Learning')),
+  ('Philosophy', (SELECT id FROM category WHERE category = 'Learning'));

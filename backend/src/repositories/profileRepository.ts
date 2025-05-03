@@ -10,16 +10,17 @@ export class profileRepository {
     let values = [data.name, data.age, data.info, data.country, data.city, data.id];
     const userResult = await database.query(query, values);
 
-    return userResult.rows[0];
+    return userResult.rows[0].id;
   }
 
   static async createInterests(
     profileId: number,
-    interests: number[]
+    interests: string[]
   ): Promise<void> {
-    const query = `INSERT INTO user_interest (profile_id, interest_id) VALUES ($1, $2)`;
+    console.log("lksf", profileId, interests)
+    const query = `INSERT INTO user_interest (profile_id, interest_id) VALUES ($1, (SELECT id FROM interests WHERE interest = $2))`;
 
-    interests.map(async (interestId: number) => {
+    interests.map(async (interestId: string) => {
       const values = [profileId, interestId];
       await database.query(query, values);
     });
@@ -71,7 +72,7 @@ export class profileRepository {
 
   static async updateInterests(
     profileId: number,
-    interests: number[]
+    interests: string[]
   ): Promise<void> {
     const deleteQuery = `DELETE FROM user_interest WHERE profile_id = $1`;
     await database.query(deleteQuery, [profileId]);

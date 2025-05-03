@@ -46,13 +46,15 @@ const AuthForm = () => {
     }
 
     let id;
+    const interests = [null];
+    const picture = null;
 
     await fetch("http://localhost:5000/api/v1/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({email, password }),
+      body: JSON.stringify({ email, password }),
     })
       .then(async (res) => {
         if (res.status === 201) {
@@ -60,7 +62,7 @@ const AuthForm = () => {
           const data = await res.json();
           console.log(data);
 
-          id = data.userId
+          id = data.userId;
 
           sessionStorage.setItem("userId", JSON.stringify(data.userId));
         }
@@ -69,14 +71,12 @@ const AuthForm = () => {
         console.log(err);
       });
 
-    console.log("kljwegfjkwgefelwjrk", id)
-
     fetch("http://localhost:5000/api/v1/profile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, id }),
+      body: JSON.stringify({ name, id, interests, picture }),
     })
       .then(async (res) => {
         if (res.status === 201) {
@@ -84,7 +84,7 @@ const AuthForm = () => {
         }
       })
       .catch((err) => {
-        window.alert(err)
+        window.alert(err);
         console.log(err);
       });
   };
