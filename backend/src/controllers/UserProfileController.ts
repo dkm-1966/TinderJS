@@ -11,6 +11,8 @@ class UserProfileController {
 
       const profile = await userService.get(parsedId);
 
+      console.log("profileByController", profile)
+
       res.status(200).json({
         status: "success",
         profile,
@@ -53,6 +55,8 @@ class UserProfileController {
       const userId = req.query.id;
       const parsedId = parseInt(userId as string);
       const data = req.body;
+
+      console.log("updateUserProfile", data)
 
       const id = await userService.update(parsedId, data);
 

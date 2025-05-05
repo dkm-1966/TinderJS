@@ -1,5 +1,7 @@
 import database from "../config/database";
+import IInterest from "../models/interfaces/Profile/IInterests";
 import IProfile from "../models/interfaces/Profile/IProfile";
+import IProfileDB from "../models/interfaces/Profile/IProfileDB";
 
 export class profileRepository {
   //CREATE
@@ -15,13 +17,12 @@ export class profileRepository {
 
   static async createInterests(
     profileId: number,
-    interests: string[]
+    interests: IInterest[]
   ): Promise<void> {
-    console.log("lksf", profileId, interests)
     const query = `INSERT INTO user_interest (profile_id, interest_id) VALUES ($1, (SELECT id FROM interests WHERE interest = $2))`;
 
-    interests.map(async (interestId: string) => {
-      const values = [profileId, interestId];
+    interests.map(async (interestId: IInterest) => {
+      const values = [profileId, interestId?.interest];
       await database.query(query, values);
     });
   }
@@ -37,17 +38,63 @@ export class profileRepository {
   }
 
   //READ
-  static async getProfile(id: number): Promise<IProfile | undefined> {
-    console.log("repo", id)
+  static async getProfile(id: number): Promise<IProfileDB[] | undefined> {
     const query = `SELECT * FROM profile 
                     LEFT JOIN user_interest ON user_interest.profile_id = profile.id
                     LEFT JOIN interests ON interests.id = user_interest.interest_id 
+                    LEFT JOIN category ON category.id = interests.category_id
                     LEFT JOIN picture ON picture.profile_id = profile.id
                     WHERE user_id = $1`;
     const values = [id];
     const result = await database.query(query, values);
 
-    return result.rows[0];
+    return result.rows;
+  }
+
+  static async getProfiles(limit: number, offset: number) {
+    const query = `SELECT *
+                    FROM profile
+                    LEFT JOIN user_interest ON user_interest.profile_id = profile.id
+                    LEFT JOIN interests ON interests.id = user_interest.interest_id 
+                    LEFT JOIN picture ON picture.profile_id = profile.id
+                    LIMIT $1 OFFSET $2;              
+    `
+
+    const values = [limit, offset]
+    const result = await database.query(query, values)
+    return result.rows
+  }
+
+  static async getMatchesProfiles(id: number) {
+    const query = `SELECT * FROM match
+                    JOIN profile 
+                      ON profile.id = CASE
+                        WHEN match.first_partner = $1 THEN match.second_partner
+                        WHEN match.second_partner = $1 THEN match.first_partner
+                      END
+                    LEFT JOIN user_interest ON user_interest.profile_id = profile.id
+                    LEFT JOIN interests ON interests.id = user_interest.interest_id 
+                    LEFT JOIN picture ON picture.profile_id = profile.id
+                    WHERE second_partner = $1 OR first_partner = $1 AND status = 'match'
+    `
+    const values = [id]
+    const result = await database.query(query, values)
+    return result.rows;
+  }
+
+  static async getProfilesByInterest(limit: number, offset: number, interests: string[]) {
+    const query = `SELECT *
+                    FROM profile
+                    LEFT JOIN user_interest ON user_interest.profile_id = profile.id
+                    LEFT JOIN interests ON interests.id = user_interest.interest_id 
+                    LEFT JOIN picture ON picture.profile_id = profile.id
+                    WHERE interests.interest = ANY($3)
+                    LIMIT $1 OFFSET $2;              
+    `
+
+    const values = [limit, offset, interests]
+    const result = await database.query(query, values)
+    return result.rows
   }
 
   //UPDATE
@@ -72,7 +119,7 @@ export class profileRepository {
 
   static async updateInterests(
     profileId: number,
-    interests: string[]
+    interests: IInterest[]
   ): Promise<void> {
     const deleteQuery = `DELETE FROM user_interest WHERE profile_id = $1`;
     await database.query(deleteQuery, [profileId]);

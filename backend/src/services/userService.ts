@@ -1,9 +1,10 @@
 import { userDto } from "../dto/profileDto";
+import IInterest from "../models/interfaces/Profile/IInterests";
 import IUser from "../models/interfaces/Profile/IProfile";
 import { profileRepository } from "../repositories/profileRepository";
 
 export default class userService {
-  private static async createUserIntersts(userId: number, interests: string[]) {
+  private static async createUserIntersts(userId: number, interests: IInterest[]) {
     try {
       await profileRepository.createInterests(userId, interests);
     } catch (error) {
@@ -23,13 +24,12 @@ export default class userService {
 
   static async create(data: IUser): Promise<number | undefined> {
     const id = await profileRepository.createProfile(data);
-    console.log("Service ID", id)
     if (!id) {
       throw new Error("User creation failed");
     }
 
     this.createUserIntersts(id, data.interests);
-    this.createUserPicture(id, data.picture);
+    this.createUserPicture(id, data.picture_url);
 
     return id;
   }
@@ -40,6 +40,7 @@ export default class userService {
     }
 
     const userFromDb = await profileRepository.getProfile(id);
+    console.log("profileByService", userFromDb)
     if (!userFromDb) {
       throw new Error("User not found");
     }
@@ -56,7 +57,8 @@ export default class userService {
     }
 
     await profileRepository.updateInterests(id, data.interests);
-    await profileRepository.updatePicture(id, data.picture);
+    const pics = await profileRepository.updatePicture(id, data.picture_url);
+    console.log("pic", pics)
 
     return result;
   }

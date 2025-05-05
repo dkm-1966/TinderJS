@@ -27,6 +27,7 @@ const ProfileForm: FC = () => {
       method: "GET",
     }).then(async (result) => {
       const data = await result.json();
+      console.log("ewkhfkljhekljh", data)
       setUserInfo(data.profile);
     });
   }, []);
@@ -38,14 +39,14 @@ const ProfileForm: FC = () => {
 
   function handleAddInterest(interest: IInterest) {
     const newUserInfo = { ...userInfo };
-    console.log(newUserInfo);
+    console.log("before push", newUserInfo)
     newUserInfo.interests.push(interest);
 
     const tempInterestsCatalog = [...interestsCatalog];
     const newInterestsCattallog = tempInterestsCatalog.filter(
       (item) => item !== interest
     );
-    console.log(newUserInfo);
+    console.log("newUserInfo", newUserInfo);
     setInterestsCatalog(newInterestsCattallog);
 
     setUserInfo(newUserInfo);
@@ -65,6 +66,7 @@ const ProfileForm: FC = () => {
 
   function handleSave() {
     const id = sessionStorage.getItem("userId");
+    console.log("NIGGGGGGAAAA", userInfo)
     fetch(`http://localhost:5000/api/v1/profile?id=${id}`, {
       method: "PUT",
       headers: {
@@ -156,7 +158,7 @@ const ProfileForm: FC = () => {
           <div className="flex flex-wrap bg-blue-300 w-[600px] min-h-[72px] p-2 rounded-md justify-center gap-2">
             {userInfo.interests?.map((value) => (
               <div
-                key={value.interest}
+                key={value.interest+value.category}
                 className="flex items-center justify-center bg-gray-100 w-40 h-14 p-2 rounded-md hover:bg-blue-100 duration-200 cursor-pointer select-none"
                 onClick={() => handleRemoveInterest(value)}
               >

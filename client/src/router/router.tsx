@@ -6,6 +6,7 @@ import Auth from "../pages/Auth";
 import ErrorPage from "../pages/ErrorPage";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
+import LoveFinder from "../pages/LoveFinder";
 
 const PrivateRoute = ({ element }: { element: ReactElement }) => {
   const isAuth = sessionStorage.getItem("isLogedIn") === "true";
@@ -41,4 +42,12 @@ export const router = createBrowserRouter([
       </Suspense>
     ),
   },
+  {
+    path: routes.FEEDS,
+    element: (
+      <Suspense>
+        <PrivateRoute element={<LoveFinder/>}/>
+      </Suspense>
+    )
+  }
 ]);

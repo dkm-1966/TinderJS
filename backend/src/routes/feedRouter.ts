@@ -1,9 +1,10 @@
 import { Router } from "express";
+import ProfilesFeedController from "../controllers/ProfilesFeedController";
 
 const feedRouter = Router();
 
-// feedRouter.get("/profiles", ); // In body some filtration params, isLiked param in query string
-// feedRouter.get("/profiles/:username", );// viewing a specific profile
+feedRouter.get("/profiles", ProfilesFeedController.getProfiles); // In body some filtration params
+feedRouter.get("/matches", ProfilesFeedController.getMatches); // In body some filtration params
 // feedRouter.post("/profiles/:username", ); // liking a profile, our profile id in body
 
 export default feedRouter;

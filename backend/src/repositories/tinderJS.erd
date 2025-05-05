@@ -4,8 +4,8 @@
   "settings": {
     "width": 2000,
     "height": 2000,
-    "scrollTop": -230.3684,
-    "scrollLeft": -486,
+    "scrollTop": -457.3684,
+    "scrollLeft": -192,
     "zoomLevel": 0.88,
     "show": 431,
     "database": 4,
@@ -149,8 +149,7 @@
           "FIvrwnPpDadacoUZeVqUL",
           "2yaVuF5hzEDn5vGfq2HUb",
           "Sj9efCcGcGqDK9QLVABeA",
-          "kj4o7PYiIKYw1TvhA2-sH",
-          "x1_x7b6glHXSIhzZy8Uat"
+          "kj4o7PYiIKYw1TvhA2-sH"
         ],
         "seqColumnIds": [
           "FIvrwnPpDadacoUZeVqUL",
@@ -168,7 +167,7 @@
           "color": ""
         },
         "meta": {
-          "updateAt": 1746139552404,
+          "updateAt": 1746377281875,
           "createAt": 1746139527746
         }
       },
@@ -949,7 +948,7 @@
             "2yaVuF5hzEDn5vGfq2HUb"
           ],
           "x": 535.6363,
-          "y": 856.6364,
+          "y": 850.6364,
           "direction": 2
         },
         "meta": {
@@ -977,7 +976,7 @@
             "Sj9efCcGcGqDK9QLVABeA"
           ],
           "x": 535.6363,
-          "y": 944.6364,
+          "y": 926.6364,
           "direction": 2
         },
         "meta": {
@@ -1069,6 +1068,12 @@
         "options(unique)": 1746193267161,
         "options(autoIncrement)": 1746193267161
       }
+    ],
+    "x1_x7b6glHXSIhzZy8Uat": [
+      "tableColumnEntities",
+      -1,
+      1746375883149,
+      {}
     ]
   }
 }

@@ -22,9 +22,8 @@ CREATE TABLE "user_interest"(
 CREATE TABLE "match"(
     "id" SERIAL PRIMARY KEY,
     "first_partner" INTEGER NOT NULL,
-    "second_partner" BIGINT NOT NULL,
-    "status" VARCHAR(255) NOT NULL,
-    "message" VARCHAR(255) NOT NULL
+    "second_partner" INTEGER NOT NULL,
+    "status" VARCHAR(255) NOT NULL
 );
 ALTER TABLE
     "match" ADD CONSTRAINT "match_first_partner_second_partner_unique" UNIQUE("first_partner", "second_partner");
@@ -37,7 +36,7 @@ CREATE TABLE "category"(
 CREATE TABLE "picture"(
     "id" SERIAL PRIMARY KEY,
     "picture_url" VARCHAR(255),
-    "profile_id" BIGINT NOT NULL
+    "profile_id" INTEGER NOT NULL
 );
 
 CREATE TABLE "users"(
@@ -80,7 +79,7 @@ INSERT INTO interests (interest, category_id) VALUES
   ('Guitar', (SELECT id FROM category WHERE category = 'Music')),
   ('Piano', (SELECT id FROM category WHERE category = 'Music')),
   ('Drums', (SELECT id FROM category WHERE category = 'Music')),
-  ('Listening to music', (SELECT id FROM category WHERE category = 'Music')),
+  ('Music', (SELECT id FROM category WHERE category = 'Music')),
 
   -- 📚 Learning
   ('Programming', (SELECT id FROM category WHERE category = 'Learning')),
@@ -88,3 +87,5 @@ INSERT INTO interests (interest, category_id) VALUES
   ('History', (SELECT id FROM category WHERE category = 'Learning')),
   ('Mathematics', (SELECT id FROM category WHERE category = 'Learning')),
   ('Philosophy', (SELECT id FROM category WHERE category = 'Learning'));
+
+  INSERT INTO match (first_partner, second_partner, status) VALUES (3, 1, 'match')

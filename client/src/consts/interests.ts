@@ -11,7 +11,7 @@ export const interests = [
     { interest: "Guitar", category: "Music" },
     { interest: "Piano", category: "Music" },
     { interest: "Drums", category: "Music" },
-    { interest: "Listening to music", category: "Music" },
+    { interest: "Music", category: "Music" },
   
     // 📚 Learning
     { interest: "Programming", category: "Learning" },

@@ -4,6 +4,7 @@ import express from 'express';
 import profileRouter from './routes/profileRouter';
 import authRouter from './routes/authRouter';
 import cors from 'cors';
+import feedRouter from './routes/feedRouter';
 
 const app = express();
 
@@ -13,8 +14,7 @@ app.use(
       origin: process.env.CLIENT_URL,
     })
   );
-app.use('/api/v1', profileRouter);
-app.use('/api/v1', authRouter)
+app.use('/api/v1', [profileRouter, authRouter, feedRouter]);
 
 function startServer() {
     app.listen(process.env.PORT || 3000, () => {
