@@ -12,13 +12,23 @@ export default class feedService {
         return profiles
     }
 
-    static async getMatches( id: number) {
-        if (!id) {
-            throw new Error("Error while getting matches: Id is required")
-        }
-        const profiles = await profileRepository.getMatchesProfiles(id);
-        console.log(profiles)
+    // static async getMatches( id: number) {
+    //     if (!id) {
+    //         throw new Error("Error while getting matches: Id is required")
+    //     }
+    //     const profiles = await profileRepository.getMatchesProfiles(id);
+    //     console.log(profiles)
 
-        return profiles
-    }
+    //     return profiles
+    // }
+
+    // static async getLikedProfiles( id: number) {
+    //     if (!id) {
+    //         throw new Error("Error while getting matches: Id is required")
+    //     }
+    //     const profiles = await profileRepository.getLikedProfiles(id);
+    //     console.log(profiles)
+
+    //     return profiles
+    // }
 }

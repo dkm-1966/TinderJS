@@ -5,6 +5,7 @@ import profileRouter from './routes/profileRouter';
 import authRouter from './routes/authRouter';
 import cors from 'cors';
 import feedRouter from './routes/feedRouter';
+import matchRouter from './routes/matchRouter';
 
 const app = express();
 
@@ -14,7 +15,7 @@ app.use(
       origin: process.env.CLIENT_URL,
     })
   );
-app.use('/api/v1', [profileRouter, authRouter, feedRouter]);
+app.use('/api/v1', [profileRouter, authRouter, feedRouter, matchRouter]);
 
 function startServer() {
     app.listen(process.env.PORT || 3000, () => {

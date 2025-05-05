@@ -24,6 +24,7 @@ export default class userService {
 
   static async create(data: IUser): Promise<number | undefined> {
     const id = await profileRepository.createProfile(data);
+    console.log("Service ID", id)
     if (!id) {
       throw new Error("User creation failed");
     }
@@ -40,7 +41,6 @@ export default class userService {
     }
 
     const userFromDb = await profileRepository.getProfile(id);
-    console.log("profileByService", userFromDb)
     if (!userFromDb) {
       throw new Error("User not found");
     }
@@ -57,8 +57,7 @@ export default class userService {
     }
 
     await profileRepository.updateInterests(id, data.interests);
-    const pics = await profileRepository.updatePicture(id, data.picture_url);
-    console.log("pic", pics)
+    await profileRepository.updatePicture(id, data.picture_url);
 
     return result;
   }

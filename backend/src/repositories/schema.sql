@@ -88,4 +88,6 @@ INSERT INTO interests (interest, category_id) VALUES
   ('Mathematics', (SELECT id FROM category WHERE category = 'Learning')),
   ('Philosophy', (SELECT id FROM category WHERE category = 'Learning'));
 
-  INSERT INTO match (first_partner, second_partner, status) VALUES (3, 1, 'match')
+  INSERT INTO match (first_partner, second_partner, status) VALUES (2, 1, 'match');
+  INSERT INTO match (first_partner, second_partner, status) VALUES (1, 3, 'match');
+  INSERT INTO match (first_partner, second_partner, status) VALUES (4, 3, 'pending');
