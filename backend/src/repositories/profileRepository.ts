@@ -47,31 +47,43 @@ export class profileRepository {
                     WHERE user_id = $1`;
     const values = [id];
     const result = await database.query(query, values);
-
+    console.log("repa", result)
     return result.rows;
   }
 
-  static async getProfiles(limit: number, offset: number) {
+  static async getProfiles(limit: number, offset: number, id: number) {
+    console.log("repo")
     const query = `SELECT *
                     FROM profile
                     LEFT JOIN user_interest ON user_interest.profile_id = profile.id
                     LEFT JOIN interests ON interests.id = user_interest.interest_id 
                     LEFT JOIN picture ON picture.profile_id = profile.id
+                    WHERE profile.id NOT IN (
+                        SELECT first_partner FROM match WHERE first_partner = $3 OR second_partner = $3
+                        UNION
+                        SELECT second_partner FROM match WHERE first_partner = $3 OR second_partner = $3
+                    ) AND profile.id != $3
                     LIMIT $1 OFFSET $2;              
     `
 
-    const values = [limit, offset]
+    const values = [limit, offset, id]
     const result = await database.query(query, values)
+    
     return result.rows
   }
 
-  static async getProfilesByInterest(limit: number, offset: number, interests: string[]) {
+  static async getProfilesByInterest(limit: number, offset: number, id: number, interests: string[]) {
     const query = `SELECT *
                     FROM profile
                     LEFT JOIN user_interest ON user_interest.profile_id = profile.id
                     LEFT JOIN interests ON interests.id = user_interest.interest_id 
                     LEFT JOIN picture ON picture.profile_id = profile.id
-                    WHERE interests.interest = ANY($3)
+                    WHERE profile.id NOT IN (
+                        SELECT first_partner FROM match WHERE first_partner = $3 OR second_partner = $3
+                        UNION
+                        SELECT second_partner FROM match WHERE first_partner = $3 OR second_partner = $3
+                    ) AND profile.id != $3
+                    AND interests.interest = ANY($3)
                     LIMIT $1 OFFSET $2;              
     `
 

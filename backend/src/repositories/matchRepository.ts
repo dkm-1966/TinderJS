@@ -1,6 +1,7 @@
 import database from "../config/database";
 
 export default class MatchRepository {
+  //READ
     static async getMatchesProfiles(id: number) {
         const query = `SELECT * FROM match
                         JOIN profile 
@@ -31,6 +32,7 @@ export default class MatchRepository {
         return result.rows;
       }
 
+  //UPDATE
       static async updateMatch(id: number, partnerId: number) {
         const query = `UPDATE match SET status = 'match' 
                         WHERE first_partner = $2 AND second_partner = $1

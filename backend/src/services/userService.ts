@@ -1,38 +1,24 @@
+import database from "../config/database";
 import { userDto } from "../dto/profileDto";
 import IInterest from "../models/interfaces/Profile/IInterests";
 import IUser from "../models/interfaces/Profile/IProfile";
 import { profileRepository } from "../repositories/profileRepository";
 
 export default class userService {
-  private static async createUserIntersts(userId: number, interests: IInterest[]) {
-    try {
-      await profileRepository.createInterests(userId, interests);
-    } catch (error) {
-      console.log(error)
-      throw new Error("Error while creating interests");
-    }
-  }
-
-  private static async createUserPicture(userId: number, picture: string) {
-    try {
-      await profileRepository.createPicture(userId, picture);
-    } catch (error) {
-      console.log(error)
-      throw new Error("Error while creating pictures");
-    }
-  }
-
   static async create(data: IUser): Promise<number | undefined> {
-    const id = await profileRepository.createProfile(data);
-    console.log("Service ID", id)
-    if (!id) {
-      throw new Error("User creation failed");
+    try {
+      await database.query('BEGIN');
+      const id = await profileRepository.createProfile(data);
+      await profileRepository.createInterests(id, data.interests);
+      await profileRepository.createPicture(id, data.picture_url);
+      await database.query('COMMIT');
+      
+      return id;
+    } catch (error) {
+      await database.query('ROLLBACK');
+      throw error;
     }
-
-    this.createUserIntersts(id, data.interests);
-    this.createUserPicture(id, data.picture_url);
-
-    return id;
+    
   }
 
   static async get(id: number): Promise<userDto | undefined> {
@@ -50,21 +36,30 @@ export default class userService {
   }
 
   static async update(id: number, data: IUser): Promise<number | undefined> {
-    const result = await profileRepository.updateProfile(id, data);
+    try {
+      await database.query('BEGIN');
+      const result = await profileRepository.updateProfile(id, data);
+      await profileRepository.updateInterests(id, data.interests);
+      await profileRepository.updatePicture(id, data.picture_url);
+      await database.query('COMMIT');
 
-    if (!result) {
-      throw new Error("User update failed");
+      return result;
+    } catch (error) {
+      await database.query('ROLLBACK');
+      throw error;
     }
-
-    await profileRepository.updateInterests(id, data.interests);
-    await profileRepository.updatePicture(id, data.picture_url);
-
-    return result;
   }
 
   static async delete(id: number): Promise<number | undefined> {
+    try {
+      await database.query('BEGIN');
       const result = await profileRepository.deleteProfile(id);
+      await database.query('COMMIT');
 
       return result;
+    } catch (error) {
+      await database.query('ROLLBACK');
+      throw error;
+    }
   }
 }

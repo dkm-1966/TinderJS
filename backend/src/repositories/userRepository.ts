@@ -21,20 +21,4 @@ export default class userRepository {
 
         return result.rows[0];
     }
-
-    // static async deleteUser(email: string): Promise<number | undefined> {
-    //     const query = `DELETE FROM user WHERE email = ? RETURNING id`;
-    //     const values = [email];
-    //     const result = await database.query(query, values);
-
-    //     return result.rows[0];
-    // }
-
-    // static async updateUserPassword(password: string, email: string): Promise<number | undefined> {
-    //     const query = `UPDATE user SET password = ? WHERE email = ? RETURNING id`;
-    //     const values = [password, email];
-    //     const result = await database.query(query, values);
-
-    //     return result.rows[0];
-    // }
 }
