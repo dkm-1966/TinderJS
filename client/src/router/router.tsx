@@ -11,7 +11,7 @@ import LoveFinder from "../pages/LoveFinder";
 const PrivateRoute = ({ element }: { element: ReactElement }) => {
   const isAuth = sessionStorage.getItem("isLogedIn") === "true";
 
-  // if (!isAuth) return <ErrorPage />;
+  if (!isAuth) return <ErrorPage />;
 
   return element;
 };
