@@ -1,12 +1,10 @@
 import { FC } from "react";
 import Header from "../components/Header";
-import Greeting from "../components/Greeting";
 
 const Dashboard: FC = () => {
   return (
-    <div className="h-full w-full flex flex-col bg-blue-100">
+    <div className="h-screen w-full flex flex-col justify-center items-center bg-lime-50">
       <Header />
-      <Greeting />
     </div>
   );
 };

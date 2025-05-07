@@ -7,7 +7,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const Input: FC<InputProps> = ({ changeHandler, ...rest }) => {
   return (
     <input
-      className="border-2 border-gray-100 rounded-md p-2 focus:outline-none"
+      className="border-2 border-lime-200 w-full rounded-md p-2 focus:outline-none"
       onChange={(e) => {
         changeHandler?.(e.target.value);
       }}

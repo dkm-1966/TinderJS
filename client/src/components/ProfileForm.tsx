@@ -84,7 +84,7 @@ const ProfileForm: FC = () => {
   }
 
   return (
-    <div className="w-full h-full items-center justify-center flex flex-col pb-4 pt-[130px]">
+    <div className="w-full h-full items-center justify-center flex flex-col pb-4 pt-8">
       <div className="w-[600px] flex flex-col justify-center">
         <div
           className={`w-full ${
@@ -100,7 +100,7 @@ const ProfileForm: FC = () => {
             <img src={img} className="rounded-t-md" />
           )}
         </div>
-        <form className="flex flex-col gap-4 bg-pink-200 w-full p-4 rounded-b-md">
+        <form className="flex flex-col gap-4 bg-lime-600 w-full p-4 rounded-b-xl">
           <Input
             placeholder={"name"}
             type="text"
@@ -154,7 +154,7 @@ const ProfileForm: FC = () => {
             />
           </div>
 
-          <div className="flex flex-wrap bg-blue-300 w-[600px] min-h-[72px] p-2 rounded-md justify-center gap-2">
+          <div className="flex flex-wrap bg-lime-300 w-[600px] min-h-[72px] p-2 rounded-md justify-center gap-2">
             {userInfo.interests?.map((value) => (
               <div
                 key={value.interest + value.category}

@@ -2,7 +2,16 @@
 
 body {
     height: 100vh;
+    font-family: "Inter", sans-serif;
 }
+
+@layer base {
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--color-slate-50);
+      opacity: 0.5;
+    }
+  }
 
 ::-webkit-scrollbar {
     background: transparent;
