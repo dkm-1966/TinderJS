@@ -1,25 +1,16 @@
 import { FC } from "react";
-import { Link } from "react-router";
 import { routes } from "../router/routes";
+import Card from './Card';
 
 const Header: FC = () => {
   return (
-    <header className="fixed w-full shadow-md flex justify-between items-center p-8 z-10 bg-blue-200">
-      <Link to={routes.MAIN}>TinderJS</Link>
-      <nav>
-        <ul className="flex gap-4">
-          <li className="text-pink-500 hover:text-pink-400 duration-200">
-            <Link to={routes.USER_PROFILE}>Profile</Link>
-          </li>
-          <li className="text-pink-500 hover:text-pink-400 duration-200">
-            <Link to={routes.FEEDS}>LoveFinder</Link>
-          </li>
-          <li className="text-pink-500 hover:text-pink-400 duration-200">
-            <Link to={routes.MATCHES}>MyCouples</Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    <>
+    <section className="flex flex-row justify-center items-center gap-8">
+      <Card icon="fa-solid fa-user" title="Profile" routeName={routes.USER_PROFILE}/>
+      <Card icon="fa-solid fa-heart" title="LoveFinder" routeName={routes.FEEDS}/>
+      <Card icon="fa-solid fa-users" title="MyCouples" routeName={routes.MATCHES} />
+    </section>
+    </>
   );
 };
 

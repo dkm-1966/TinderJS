@@ -58,7 +58,7 @@ const AuthForm = () => {
     })
       .then(async (res) => {
         if (res.status === 201) {
-          sessionStorage.setItem("isLogedIn", JSON.stringify(true));
+          sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
           const data = await res.json();
           console.log(data);
 
@@ -91,10 +91,11 @@ const AuthForm = () => {
 
   const handleSubmit = () => {
     isAccountExists ? handleLogin() : handleRegister();
+    navigate(routes.MAIN) //deleting this later
   };
 
   return (
-    <div className="bg-blue-200 border-gray-200 p-2 rounded-md flex flex-col gap-2.5 w-2xl">
+    <div className="bg-lime-600 border-gray-200 py-8 px-6 rounded-2xl flex flex-col items-center gap-4 w-2xl border-lime-200">
       {!isAccountExists && (
         <Input
           placeholder={"name"}
@@ -114,19 +115,10 @@ const AuthForm = () => {
       />
       <div className="flex gap-2">
         <Button callback={handleSubmit}>Submit</Button>
-      </div>
-
-      <div>
         {!isAccountExists ? (
-          <>
-            <h3>Already have an account?</h3>
-            <Button callback={() => setIsAccountExists(true)}>Log In</Button>
-          </>
+            <Button callback={() => setIsAccountExists(true)}>Already have an account?</Button>
         ) : (
-          <>
-            <h3>Don't have an account?</h3>
-            <Button callback={() => setIsAccountExists(false)}>Sign Up</Button>
-          </>
+            <Button callback={() => setIsAccountExists(false)}>Don't have an account?</Button>
         )}
       </div>
     </div>
