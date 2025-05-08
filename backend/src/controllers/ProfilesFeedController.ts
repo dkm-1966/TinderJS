@@ -22,6 +22,7 @@ export default class ProfilesFeedController {
       const formattedId = parseInt(id as string)
       const feeds = await feedService.get(formattedLimit, formattedOffset, formattedId, interests);
       res.status(200).json(feeds);
+      console.log('Get profiles: ', feeds)
     } catch (error) {
       console.log(error);
       res.status(500).json({

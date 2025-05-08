@@ -227,10 +227,10 @@ const ProfileForm: FC = () => {
         </div>
         <div className="mt-4">
           {!isCreatingPhase && (
-            <>
+            <div className="flex flex-col gap-4">
               <Button callback={handleSave}>Save</Button>
               <Button callback={handleDelete}>Delete</Button>
-            </>
+            </div>
           )}
           {isCreatingPhase && <Button callback={handleCreate}>Create</Button>}
         </div>

@@ -7,7 +7,7 @@ const LoveFinder: FC = () => {
   return (
     <div>
       <Couples/>
-      {/* <Feed/> */}
+      <Feed />
     </div>
   )
 }
