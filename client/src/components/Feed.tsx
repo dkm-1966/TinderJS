@@ -37,16 +37,7 @@ const Feed: FC = () => {
 
   console.log("profiles", profiles);
   return (
-    <div>
-      <h2>Feed</h2>
-      {profiles.map((profile) => (
-        <div key={profile.id}>
-          <h3>{profile.name}</h3>
-          <p>Interests raw: {JSON.stringify(profile.interests)}</p>
-          <p>Interests clean: {profile.interests.join(", ")}</p>
-        </div>
-      ))}
-    </div>
+    <div></div>
   );
 };
 

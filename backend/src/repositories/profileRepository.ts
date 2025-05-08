@@ -84,66 +84,26 @@ export class profileRepository {
     return result.rows[0];
   }
 
-  static groupProfiles(rows: any[]) {
-    const map = new Map();
-  
-    rows.forEach(row => {
-      const profileId = row.id;
-      const interest = row.interest;
-  
-      if (!map.has(profileId)) {
-        map.set(profileId, {
-          id: row.id,
-          name: row.name,
-          age: row.age,
-          city: row.city,
-          country: row.country,
-          picture_url: row.picture_url,
-          interests: []
-        });
-  
-        if (interest) {
-          map.get(profileId).interests.push(interest);
-        }
-  
-      } else {
-        const existing = map.get(profileId);
-        if (interest && !existing.interests.includes(interest)) {
-          existing.interests.push(interest);
-        }
-      }
-    });
-  
-    return Array.from(map.values());
-  }
-
   static async getProfiles(limit: number, offset: number, id: number) {
     console.log("getProfiles", id);
 
-    const query = `
-    WITH current_profile AS (
-        SELECT id FROM profile WHERE user_id = $3
-    )
-    SELECT *
-    FROM profile
-    LEFT JOIN user_interest ON user_interest.profile_id = profile.id
-    LEFT JOIN interests ON interests.id = user_interest.interest_id 
-    LEFT JOIN picture ON picture.profile_id = profile.id
-    WHERE profile.id NOT IN (
-        SELECT first_partner FROM match WHERE first_partner = (SELECT id FROM current_profile) OR second_partner = (SELECT id FROM current_profile)
-        UNION
-        SELECT second_partner FROM match WHERE first_partner = (SELECT id FROM current_profile) OR second_partner = (SELECT id FROM current_profile)
-    )
-    AND profile.id != (SELECT id FROM current_profile)
-    LIMIT $1 OFFSET $2;
-`;
+    const query = `SELECT *
+                    FROM profile
+                    LEFT JOIN user_interest ON user_interest.profile_id = profile.id
+                    LEFT JOIN interests ON interests.id = user_interest.interest_id 
+                    LEFT JOIN picture ON picture.profile_id = profile.id
+                    WHERE profile.id NOT IN (
+                        SELECT first_partner FROM match WHERE first_partner = $3 OR second_partner = $3
+                        UNION
+                        SELECT second_partner FROM match WHERE first_partner = $3 OR second_partner = $3
+                    ) AND profile.user_id != $3
+                    LIMIT $1 OFFSET $2;`          
+    
 
     const values = [limit, offset, id];
     const rawData = await database.query(query, values);
-    
-    const groupedData = this.groupProfiles(rawData.rows)
 
-    return groupedData
+    return rawData.rows
   }
 
   static async getProfilesByInterest(
