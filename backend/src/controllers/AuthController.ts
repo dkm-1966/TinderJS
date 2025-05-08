@@ -3,6 +3,7 @@ import { AuthService } from "../services/authService";
 
 export default class AuthController {
   static async register(req: Request, res: Response): Promise<void> {
+    console.log("register")
     try {
       const { email, password } = req.body;
       const userId = await AuthService.register(email, password);
@@ -17,6 +18,7 @@ export default class AuthController {
   }
 
   static async login(req: Request, res: Response): Promise<void> {
+    console.log("login")
     try {
       const { email, password } = req.body;
       const userId = await AuthService.login(email, password);

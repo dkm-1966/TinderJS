@@ -5,7 +5,7 @@ CREATE TABLE "profile"(
     "info" VARCHAR(255),
     "country" VARCHAR(255),
     "city" VARCHAR(255),
-    "user_id" INTEGER
+    "user_id" INTEGER NOT NULL
 );
 
 CREATE TABLE "interests"(

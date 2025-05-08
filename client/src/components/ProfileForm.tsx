@@ -6,28 +6,50 @@ import { interests } from "../consts/interests";
 import Button from "../UI/Button";
 import Dropdown from "../UI/Dropdown";
 
+const defaultUser: IUser = {
+  name: null,
+  age: null,
+  info: null,
+  country: null,
+  city: null,
+  picture_url: null,
+  interests: [],
+};
+
 const ProfileForm: FC = () => {
-  const [userInfo, setUserInfo] = useState<IUser>({
-    name: null,
-    age: null,
-    info: null,
-    country: null,
-    city: null,
-    picture_url: null,
-    interests: [],
-  });
+  const [userInfo, setUserInfo] = useState<IUser>(defaultUser);
   const [interestsCatalog, setInterestsCatalog] =
     useState<IInterest[]>(interests);
   const [category, setCategory] = useState<string>("");
+  const [isCreatingPhase, setIsCreatingPhase] = useState<boolean>(false);
+
+  const fetchUser = (id: string) => {
+    console.log("ERROR handling");
+    fetch(`http://localhost:5001/api/v1/user?id=${id}`, {
+      method: "GET",
+    }).then(() => {
+      setUserInfo(defaultUser);
+      setIsCreatingPhase(true);
+    });
+  };
 
   useEffect(() => {
+    console.log("useEffect");
     const id = sessionStorage.getItem("userId");
-    console.log("SessionUserID", id);
-    fetch(`http://localhost:5000/api/v1/profile?id=${id}`, {
+    if (!id) {
+      window.alert("User doesn't exists");
+      return;
+    }
+
+    fetch(`http://localhost:5001/api/v1/profile?id=${id}`, {
       method: "GET",
     }).then(async (result) => {
       const data = await result.json();
-      console.log("ewkhfkljhekljh", data);
+      console.log("we;fwer;gj", data);
+      if (data.status === "error") {
+        fetchUser(id);
+        return;
+      }
       setUserInfo(data.profile);
     });
   }, []);
@@ -66,7 +88,7 @@ const ProfileForm: FC = () => {
 
   function handleSave() {
     const id = sessionStorage.getItem("userId");
-    fetch(`http://localhost:5000/api/v1/profile?id=${id}`, {
+    fetch(`http://localhost:5001/api/v1/profile?id=${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -81,6 +103,28 @@ const ProfileForm: FC = () => {
     );
     setInterestsCatalog(categorizedInterestsCatalog);
     setCategory(value);
+  }
+
+  function handleDelete() {
+    const id = sessionStorage.getItem("userId");
+    fetch(`http://localhost:5001/api/v1/profile?id=${id}`, {
+      method: "DELETE",
+    });
+    setUserInfo(defaultUser);
+    setIsCreatingPhase(true);
+  }
+
+  function handleCreate() {
+    const id = sessionStorage.getItem("userId");
+    console.log(id);
+    fetch(`http://localhost:5001/api/v1/profile?id=${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userInfo),
+    });
+    setIsCreatingPhase(false);
   }
 
   return (
@@ -182,7 +226,13 @@ const ProfileForm: FC = () => {
           )}
         </div>
         <div className="mt-4">
-          <Button callback={handleSave}>Save</Button>
+          {!isCreatingPhase && (
+            <>
+              <Button callback={handleSave}>Save</Button>
+              <Button callback={handleDelete}>Delete</Button>
+            </>
+          )}
+          {isCreatingPhase && <Button callback={handleCreate}>Create</Button>}
         </div>
       </div>
     </div>

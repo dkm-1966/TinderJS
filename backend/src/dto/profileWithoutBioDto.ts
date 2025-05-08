@@ -2,6 +2,7 @@ import IInterest from "../models/interfaces/Profile/IInterests";
 import IProfileDB from "../models/interfaces/Profile/IProfileDB";
 
 export default class ProfileWithoutBioDto {
+    id: number;
     name: string | null;
     age: number | null;
     country: string | null;
@@ -31,6 +32,7 @@ export default class ProfileWithoutBioDto {
       
 
       this.name = isArray ? userFromDb[0].name : userFromDb.name;
+      this.id = isArray ? userFromDb[0].id : userFromDb.id;
       this.age = isArray ? userFromDb[0].age : userFromDb.age;
       this.country = isArray ? userFromDb[0].country : userFromDb.country;
       this.city = isArray ? userFromDb[0].city : userFromDb.city;

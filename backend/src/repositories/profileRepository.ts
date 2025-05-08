@@ -5,54 +5,88 @@ import IProfileDB from "../models/interfaces/Profile/IProfileDB";
 
 export class profileRepository {
   //CREATE
-  static async createProfile(data: IProfile): Promise<number> {
-    console.log("rope", data)
+  static async createProfile(data: IProfile, id: number): Promise<number> {
+    console.log("createProfile", data)
     let query = `INSERT INTO profile (name, age, info, country, city, user_id) 
                 VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`;
-    let values = [data.name, data.age, data.info, data.country, data.city, data.id];
+    let values = [data.name, data.age, data.info, data.country, data.city, id];
     const userResult = await database.query(query, values);
+    console.log("createProfile result:", userResult)
 
     return userResult.rows[0].id;
   }
 
   static async createInterests(
     profileId: number,
-    interests: IInterest[]
+    interest: string
   ): Promise<void> {
-    const query = `INSERT INTO user_interest (profile_id, interest_id) VALUES ($1, (SELECT id FROM interests WHERE interest = $2))`;
+    console.log("createInterests", profileId, interest)
+    const query = `INSERT INTO user_interest (profile_id, interest_id) 
+    VALUES ($1, (SELECT id FROM interests WHERE interest = $2))`;
 
-    interests.map(async (interestId: IInterest) => {
-      const values = [profileId, interestId?.interest];
-      await database.query(query, values);
-    });
+      const values = [profileId, interest];
+      const result = await database.query(query, values);
+      console.log("createInterests result", result)
   }
 
   static async createPicture(
     profileId: number,
     picture: string
-  ): Promise<void> {
-    const query = `INSERT INTO picture (profile_id, picture_url) VALUES ($1, $2)`;
+  ): Promise<number> {
+    console.log("createPicture", profileId, picture)
+
+    const query = `INSERT INTO picture (profile_id, picture_url) VALUES ($1, $2) RETURNING id`;
 
     const values = [profileId, picture];
-    await database.query(query, values);
+    const result = await database.query(query, values);
+
+    console.log("createPicture result", result)
+
+    return result.rows[0].id
   }
 
   //READ
   static async getProfile(id: number): Promise<IProfileDB[] | undefined> {
-    const query = `SELECT * FROM profile 
-                    LEFT JOIN user_interest ON user_interest.profile_id = profile.id
-                    LEFT JOIN interests ON interests.id = user_interest.interest_id 
-                    LEFT JOIN category ON category.id = interests.category_id
-                    LEFT JOIN picture ON picture.profile_id = profile.id
-                    WHERE user_id = $1`;
+    console.log("getProfile", id)
+    const query = `SELECT 
+                    profile.id,
+                    profile.name,
+                    profile.age,
+                    profile.info,
+                    profile.country,
+                    profile.city,
+                    profile.user_id,
+                    user_interest.interest_id,
+                    interests.interest,
+                    interests.category_id,
+                    category.category,
+                    picture.picture_url
+                  FROM profile 
+                  LEFT JOIN user_interest ON user_interest.profile_id = profile.id
+                  LEFT JOIN interests ON interests.id = user_interest.interest_id 
+                  LEFT JOIN category ON category.id = interests.category_id
+                  LEFT JOIN picture ON picture.profile_id = profile.id
+                  WHERE profile.user_id = $1;`;
     const values = [id];
     const result = await database.query(query, values);
-    console.log("repa", result)
+
     return result.rows;
   }
 
+  static async getUser(id: number): Promise<number | undefined> {
+    console.log("getUser", id)
+
+    const query = `SELECT id FROM users WHERE id = $1`;
+    const values = [id];
+    const result = await database.query(query, values);
+    console.log("getUser result", result)
+
+    return result.rows[0];
+  }
+
   static async getProfiles(limit: number, offset: number, id: number) {
-    console.log("repo")
+    console.log("getProfiles", id)
+
     const query = `SELECT *
                     FROM profile
                     LEFT JOIN user_interest ON user_interest.profile_id = profile.id
@@ -68,6 +102,7 @@ export class profileRepository {
 
     const values = [limit, offset, id]
     const result = await database.query(query, values)
+    console.log("getProfiles result", result)
     
     return result.rows
   }
@@ -97,7 +132,8 @@ export class profileRepository {
     id: number,
     data: IProfile
   ): Promise<number | undefined> {
-    const query = `UPDATE profile SET name = $1, age = $2, info = $3, country = $4, city = $5 WHERE id = $6 RETURNING id`;
+    console.log("updateProfile", id, data)
+    const query = `UPDATE profile SET name = $1, age = $2, info = $3, country = $4, city = $5 WHERE user_id = $6 RETURNING id`;
     const values = [
       data.name,
       data.age,
@@ -108,6 +144,7 @@ export class profileRepository {
     ];
 
     const result = await database.query(query, values);
+    console.log("updateProfile result", result)
 
     return result.rows[0];
   }
@@ -116,15 +153,21 @@ export class profileRepository {
     profileId: number,
     interests: IInterest[]
   ): Promise<void> {
+    console.log("updateInterests", profileId, interests)
+
     const deleteQuery = `DELETE FROM user_interest WHERE profile_id = $1`;
     await database.query(deleteQuery, [profileId]);
-    await this.createInterests(profileId, interests);
+    for (const interest of interests) {
+      await this.createInterests(profileId, interest.interest);
+    }
   }
 
   static async updatePicture(
     profileId: number,
     picture: string
   ): Promise<void> {
+    console.log("updatePicture", profileId, picture)
+
     const deleteQuery = `DELETE FROM picture WHERE profile_id = $1`;
     await database.query(deleteQuery, [profileId]);
     await this.createPicture(profileId, picture);
@@ -132,10 +175,13 @@ export class profileRepository {
 
   //DELETE
   static async deleteProfile(id: number): Promise<number | undefined> {
-    const query = `DELETE FROM profile WHERE id = $1 RETURNING id`;
+    console.log("deleteProfile", id)
+  
+    const query = `DELETE FROM profile WHERE user_id = $1 RETURNING id`;
     const values = [id];
 
     const result = await database.query(query, values);
+    console.log("deleteProfile result", result)
 
     return result.rows[0];
   }

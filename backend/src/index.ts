@@ -15,7 +15,11 @@ app.use(
       origin: process.env.CLIENT_URL,
     })
   );
-app.use('/api/v1', [profileRouter, authRouter, feedRouter, matchRouter]);
+
+app.use("/api/v1", profileRouter);
+app.use("/api/v1", authRouter);
+app.use("/api/v1", feedRouter);
+app.use("/api/v1", matchRouter);
 
 function startServer() {
     app.listen(process.env.PORT || 3000, () => {

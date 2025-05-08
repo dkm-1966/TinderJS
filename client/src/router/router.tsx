@@ -1,4 +1,3 @@
-import { Router } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 import { ReactElement, Suspense } from "react";
 import { routes } from "./routes";
@@ -9,7 +8,7 @@ import Profile from "../pages/Profile";
 import LoveFinder from "../pages/LoveFinder";
 
 const PrivateRoute = ({ element }: { element: ReactElement }) => {
-  const isAuth = sessionStorage.getItem("isLogedIn") === "true";
+  const isAuth = sessionStorage.getItem("isLoggedIn") === "true";
 
   if (!isAuth) return <ErrorPage />;
 
@@ -46,8 +45,8 @@ export const router = createBrowserRouter([
     path: routes.FEEDS,
     element: (
       <Suspense>
-        <PrivateRoute element={<LoveFinder/>}/>
+        <PrivateRoute element={<LoveFinder />} />
       </Suspense>
-    )
-  }
+    ),
+  },
 ]);

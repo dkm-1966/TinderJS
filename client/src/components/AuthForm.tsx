@@ -17,7 +17,7 @@ const AuthForm = () => {
       return;
     }
 
-    fetch("http://localhost:5000/api/v1/login", {
+    fetch("http://localhost:5001/api/v1/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,10 +46,10 @@ const AuthForm = () => {
     }
 
     let id;
-    const interests = [null];
+    const interests = null;
     const picture = null;
 
-    await fetch("http://localhost:5000/api/v1/register", {
+    await fetch("http://localhost:5001/api/v1/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -71,12 +71,12 @@ const AuthForm = () => {
         console.log(err);
       });
 
-    fetch("http://localhost:5000/api/v1/profile", {
+    fetch(`http://localhost:5001/api/v1/profile?id=${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, id, interests, picture }),
+      body: JSON.stringify({ name, interests, picture }),
     })
       .then(async (res) => {
         if (res.status === 201) {
@@ -91,7 +91,6 @@ const AuthForm = () => {
 
   const handleSubmit = () => {
     isAccountExists ? handleLogin() : handleRegister();
-    navigate(routes.MAIN) //deleting this later
   };
 
   return (
@@ -116,9 +115,13 @@ const AuthForm = () => {
       <div className="flex gap-2">
         <Button callback={handleSubmit}>Submit</Button>
         {!isAccountExists ? (
-            <Button callback={() => setIsAccountExists(true)}>Already have an account?</Button>
+          <Button callback={() => setIsAccountExists(true)}>
+            Already have an account?
+          </Button>
         ) : (
-            <Button callback={() => setIsAccountExists(false)}>Don't have an account?</Button>
+          <Button callback={() => setIsAccountExists(false)}>
+            Don't have an account?
+          </Button>
         )}
       </div>
     </div>

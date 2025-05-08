@@ -18,7 +18,7 @@ const Couples: FC = () => {
     //   console.log("hellnaaah", data);
     //   setCouples(data);
     // });
-    fetch(`http://localhost:5000/api/v1/matches?id=${id}`, {
+    fetch(`http://localhost:5001/api/v1/matches?id=${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
