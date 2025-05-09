@@ -6,6 +6,7 @@ export default class MatchController {
     try {
       const id = req.query.id;
       const formattedId = parseInt(id as string);
+      console.log("getMatches controller", id)
 
       const feeds = await MatchService.getMatches(formattedId);
 
@@ -13,7 +14,7 @@ export default class MatchController {
     } catch (error) {
       console.log(error);
       res.status(500).json({
-        message: "Error updating user profile",
+        message: "Error getting matches",
       });
     }
   }

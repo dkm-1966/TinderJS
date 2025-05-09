@@ -8,7 +8,7 @@ import Profile from "../pages/Profile";
 import LoveFinder from "../pages/LoveFinder";
 
 const PrivateRoute = ({ element }: { element: ReactElement }) => {
-  const isAuth = sessionStorage.getItem("isLoggedIn") === "true";
+  const isAuth = sessionStorage.getItem("isLogedIn") === "true";
 
   if (!isAuth) return <ErrorPage />;
 

@@ -67,7 +67,7 @@ export class profileRepository {
                   LEFT JOIN category ON category.id = interests.category_id
                   LEFT JOIN picture ON picture.profile_id = profile.id
                   WHERE profile.user_id = $1
-                  GROUP BY profile.id;`;
+                  GROUP BY profile.id, picture.picture_url;`;
     const values = [id];
     const result = await database.query(query, values);
 

@@ -18,7 +18,7 @@ export default class ProfileWithoutBioDto {
       this.city = userFromDb.city;
       this.picture_url = userFromDb.picture_url;
 
-      if (userFromDb.interests.length === 1 && userFromDb.interests[0] === null) {
+      if (userFromDb.interests?.length === 1 && userFromDb.interests[0] === null) {
         this.interests = [];
       } else {
         this.interests = userFromDb.interests;

@@ -1,11 +1,13 @@
 import { FC } from 'react'
 import Feed from '../components/Feed';
 import Couples from '../components/Couples';
+import Header from '../components/Header';
 
 const LoveFinder: FC = () => {
 
   return (
-    <div>
+    <div className='min-h-screen bg-lime-100 flex flex-col items-center pt-16 gap-8'>
+      <Header/>
       <Couples/>
       <Feed />
     </div>
