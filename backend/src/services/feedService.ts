@@ -3,12 +3,13 @@ import { profileRepository } from "../repositories/profileRepository";
 
 export default class feedService {
     static async get(limit: number, offset: number, id: number, interests: string[]): Promise<ProfileWithoutBioDto[]> {
-        console.log("servise")
+        console.log("servise", interests )
         let profiles;
 
         if (interests.length > 0) {
             profiles = await profileRepository.getProfilesByInterest(limit, offset, id, interests);
         } else {
+            console.log("12")
             profiles = await profileRepository.getProfiles(limit, offset, id);
         }
 

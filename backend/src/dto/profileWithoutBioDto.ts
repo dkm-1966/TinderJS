@@ -8,34 +8,20 @@ export default class ProfileWithoutBioDto {
     country: string | null;
     city: string | null;
     picture_url: string | null;
-    interests: IInterest[] | null;
+    interests: string[] | null;
 
-    constructor(userFromDb: IProfileDB[] | IProfileDB) {
-      this.interests = [];
-      const isArray = Array.isArray(userFromDb)
+    constructor(userFromDb: IProfileDB) {
+      this.name = userFromDb.name;
+      this.id = userFromDb.id;
+      this.age = userFromDb.age;
+      this.country = userFromDb.country;
+      this.city = userFromDb.city;
+      this.picture_url = userFromDb.picture_url;
 
-      if (isArray) {
-        for (const elem of userFromDb) {
-          if (elem.interest && elem.category) {
-            this.interests.push({
-              interest: elem.interest,
-              category: elem.category,
-            });
-          }
-        }
+      if (userFromDb.interests.length === 1 && userFromDb.interests[0] === null) {
+        this.interests = [];
       } else {
-        this.interests.push({
-          interest: userFromDb.interest,
-          category: userFromDb.category,
-        });
+        this.interests = userFromDb.interests;
       }
-      
-
-      this.name = isArray ? userFromDb[0].name : userFromDb.name;
-      this.id = isArray ? userFromDb[0].id : userFromDb.id;
-      this.age = isArray ? userFromDb[0].age : userFromDb.age;
-      this.country = isArray ? userFromDb[0].country : userFromDb.country;
-      this.city = isArray ? userFromDb[0].city : userFromDb.city;
-      this.picture_url = isArray ? userFromDb[0].picture_url : userFromDb.picture_url;
     }
 }

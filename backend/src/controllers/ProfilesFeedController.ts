@@ -7,13 +7,13 @@ export default class ProfilesFeedController {
       const { limit, offset, id } = req.query;
       
       let interestsRaw = req.query.interest; 
-      console.log(limit, offset, id, interestsRaw)
-
       let interests: string[] = [];
 
       if (interestsRaw) {
         if (Array.isArray(interestsRaw)) {
           interests = interestsRaw.map(i => String(i));
+        } else {
+          interests.push(interestsRaw as string)
         }
       }
       

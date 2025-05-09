@@ -46,7 +46,7 @@ export class profileRepository {
   }
 
   //READ
-  static async getProfile(id: number): Promise<IProfileDB[] | undefined> {
+  static async getProfile(id: number): Promise<IProfileDB | undefined> {
     console.log("getProfile", id);
     const query = `SELECT 
                     profile.id,
@@ -56,21 +56,22 @@ export class profileRepository {
                     profile.country,
                     profile.city,
                     profile.user_id,
-                    user_interest.interest_id,
-                    interests.interest,
-                    interests.category_id,
-                    category.category,
+                    ARRAY_AGG(DISTINCT jsonb_build_object(
+                                'interest', interests.interest,
+                                'category', category.category
+                              )) AS interests,
                     picture.picture_url
                   FROM profile 
                   LEFT JOIN user_interest ON user_interest.profile_id = profile.id
                   LEFT JOIN interests ON interests.id = user_interest.interest_id 
                   LEFT JOIN category ON category.id = interests.category_id
                   LEFT JOIN picture ON picture.profile_id = profile.id
-                  WHERE profile.user_id = $1;`;
+                  WHERE profile.user_id = $1
+                  GROUP BY profile.id;`;
     const values = [id];
     const result = await database.query(query, values);
 
-    return result.rows;
+    return result.rows[0];
   }
 
   static async getUser(id: number): Promise<number | undefined> {
@@ -87,16 +88,22 @@ export class profileRepository {
   static async getProfiles(limit: number, offset: number, id: number) {
     console.log("getProfiles", id);
 
-    const query = `SELECT *
+    const query = `SELECT profile.*,
+                    ARRAY_AGG(DISTINCT jsonb_build_object(
+                                'interest', interests.interest,
+                                'category', category.category
+                              )) AS interests
                     FROM profile
                     LEFT JOIN user_interest ON user_interest.profile_id = profile.id
                     LEFT JOIN interests ON interests.id = user_interest.interest_id 
+                    LEFT JOIN category ON category.id = interests.category_id
                     LEFT JOIN picture ON picture.profile_id = profile.id
                     WHERE profile.id NOT IN (
                         SELECT first_partner FROM match WHERE first_partner = $3 OR second_partner = $3
                         UNION
                         SELECT second_partner FROM match WHERE first_partner = $3 OR second_partner = $3
                     ) AND profile.user_id != $3
+                    GROUP BY profile.id
                     LIMIT $1 OFFSET $2;`          
     
 
@@ -112,21 +119,34 @@ export class profileRepository {
     id: number,
     interests: string[]
   ) {
-    const query = `SELECT *
+    console.log("REPOS",id,interests )
+    const query = `SELECT profile.*,
+                    ARRAY_AGG(DISTINCT jsonb_build_object(
+                                'interest', interests.interest,
+                                'category', category.category
+                              )) AS interests
                     FROM profile
                     LEFT JOIN user_interest ON user_interest.profile_id = profile.id
                     LEFT JOIN interests ON interests.id = user_interest.interest_id 
+                    LEFT JOIN category ON category.id = interests.category_id
                     LEFT JOIN picture ON picture.profile_id = profile.id
                     WHERE profile.id NOT IN (
                         SELECT first_partner FROM match WHERE first_partner = $3 OR second_partner = $3
                         UNION
                         SELECT second_partner FROM match WHERE first_partner = $3 OR second_partner = $3
-                    ) AND profile.id != $3
-                    AND interests.interest = ANY($3)
+                    ) AND profile.user_id != $3
+                    AND EXISTS (
+                      SELECT 1
+                      FROM user_interest ui
+                      JOIN interests i ON i.id = ui.interest_id
+                      WHERE ui.profile_id = profile.id
+                      AND i.interest = ANY($4)
+                    )
+                    GROUP BY profile.id
                     LIMIT $1 OFFSET $2;              
     `;
 
-    const values = [limit, offset, interests];
+    const values = [limit, offset, id, interests ];
     const result = await database.query(query, values);
     return result.rows;
   }

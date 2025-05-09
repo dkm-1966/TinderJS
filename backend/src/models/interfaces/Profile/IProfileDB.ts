@@ -7,9 +7,9 @@ export default interface IProfileDB {
     city: string,
     user_id: number,
     profile_id: number,
-    interest_id: number,
-    interest: string,
-    category_id: number,
-    category: string,
+    // interest_id: number,
+    interests: string[],
+    // category_id: number,
+    // category: string,
     picture_url: string
 }

@@ -15,7 +15,7 @@ const Feed: FC = () => {
 
   useEffect(() => {
     const limit = 10;
-    const interests: string[] = [];
+    const interests: string[] = ["Football"];
     const query = new URLSearchParams();
     interests.forEach((i) => query.append("interest", i));
 
@@ -36,9 +36,7 @@ const Feed: FC = () => {
   }, []);
 
   console.log("profiles", profiles);
-  return (
-    <div></div>
-  );
+  return <div></div>;
 };
 
 export default Feed;
