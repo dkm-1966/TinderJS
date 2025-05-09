@@ -1,8 +1,39 @@
+import { Sequelize } from "sequelize";
+import { Op } from 'sequelize';
 import database from "../config/database";
+import { Match } from "../models/Match";
+import { UserInterest } from "../models/UserInterest";
+import { Interests } from "../models/Interests";
+import { Picture } from "../models/Picture";
 
 export default class MatchRepository {
   //READ
     static async getMatchesProfiles(id: number) {
+        // const matches = await Match.findAll({
+        //   where: {
+        //     [Op.or]: [
+        //       { first_partner: id },
+        //       { second_partner: id }
+        //     ], 
+        //     status: 'match'
+        //   },
+        //   include: [
+        //     {
+        //       model: UserInterest,
+        //       include: [
+        //         {
+        //           model: Interests
+        //         }
+        //       ]
+        //     },
+        //     {
+        //       model: Picture
+        //     }
+        //   ]
+        // })
+
+        // console.log("ORM matches:", matches)
+        // return matches
         const query = `SELECT * FROM match
                         JOIN profile 
                           ON profile.id = CASE
