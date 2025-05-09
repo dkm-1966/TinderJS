@@ -45,7 +45,7 @@ const ProfileForm: FC = () => {
       method: "GET",
     }).then(async (result) => {
       const data = await result.json();
-      console.log("we;fwer;gj", data);
+      console.log("get profile data", data);
       if (data.status === "error") {
         fetchUser(id);
         return;
