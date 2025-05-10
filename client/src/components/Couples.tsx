@@ -20,14 +20,18 @@ const Couples: FC = () => {
 
 
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-2xl text-lime-600 font-extrabold">Hey, don't forget about your matches?</h2>
-      <div className="flex flex-col items-center justify-center gap-4 w-216 p-4 bg-lime-600 rounded-3xl">
-      {couples?.map((couple) => (
-        <ProfileShortCard key={couple.name} picture_url={couple.picture_url} name={couple.name} country={couple.country} city={couple.city} interests={null}/>
-      ))}
-      </div>
-    </div>
+    <>
+      {couples && couples.length > 0 && (
+        <div className="flex flex-col gap-4">
+          <h2 className="text-2xl text-lime-600 font-extrabold">Hey, don't forget about your matches?</h2>
+          <div className="flex flex-col items-center justify-center gap-4 w-216 p-4 bg-lime-600 rounded-3xl">
+            {couples.map((couple) => (
+              <ProfileShortCard key={couple.name} picture_url={couple.picture_url} name={couple.name} country={couple.country} city={couple.city} interests={null} />
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

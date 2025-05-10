@@ -6,7 +6,7 @@ import Header from '../components/Header';
 const LoveFinder: FC = () => {
 
   return (
-    <div className='min-h-screen bg-lime-100 flex flex-col items-center pt-16 gap-8'>
+    <div className='min-h-screen bg-lime-100 flex flex-col items-center py-16 gap-8'>
       <Header/>
       <Couples/>
       <Feed />

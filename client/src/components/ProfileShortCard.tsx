@@ -32,7 +32,7 @@ const ProfileShortCard: FC<ProfileShortCardProps> = ({picture_url, name, country
                     ))}
                 </div>
                 <i className="fa-solid fa-location-dot text-lime-600"/>
-                <p className="text-lg text-lime-700">{country}, {city}</p>
+                {country || city ? <p className="text-lg text-lime-700">{country} {city}</p> : <p className="text-lg text-lime-700">No location</p>}
             </div>
         </div>
     )
