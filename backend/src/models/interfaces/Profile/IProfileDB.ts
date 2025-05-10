@@ -8,5 +8,6 @@ export default interface IProfileDB {
     user_id: number,
     profile_id: number,
     interests: string[] | null,
-    picture_url: string
+    picture_url: string,
+    status: string
 }

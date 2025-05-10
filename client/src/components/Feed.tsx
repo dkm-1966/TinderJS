@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import ProfileShortCard from "./ProfileShortCard";
-import PaginationButton from "../UI/PaginationButton";
+import OutlinedButton from "../UI/OutilendButton";
 
 interface Profile {
   id: string;
@@ -60,8 +60,8 @@ const Feed: FC = () => {
       <div className="flex flex-row items-center justify-between">
         <h2 className="text-2xl text-lime-600 font-extrabold">Here is your possible love</h2>
         <p className="flex flex-row items-center gap-4 mr-4">
-          <PaginationButton callback={handlePrevPage} isDisabled={isPrevBtnDisabled}>Previous</PaginationButton>
-          <PaginationButton callback={handleNextPage} isDisabled={isNextBtnDisabled}>Next</PaginationButton>
+          <OutlinedButton callback={handlePrevPage} isDisabled={isPrevBtnDisabled}>Previous</OutlinedButton>
+          <OutlinedButton callback={handleNextPage} isDisabled={isNextBtnDisabled}>Next</OutlinedButton>
         </p>
       </div>
       <div className="flex flex-col items-center justify-center gap-4 w-216 p-4 bg-lime-600 rounded-3xl">
